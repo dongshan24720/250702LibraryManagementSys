@@ -1,0 +1,16 @@
+用户名,真实姓名,性别,年龄,手机号,邮箱
+student001,陈明,男,20,13912345678,chenming@email.com
+student002,林小雨,女,21,13923456789,linyu@email.com
+student003,张伟,男,19,13934567890,zhangwei@email.com
+student004,刘梅,女,22,13945678901,liumei@email.com
+student005,黄强,男,23,13956789012,huangqiang@email.com
+student006,李敏,女,20,13967890123,limin@email.com
+student007,王浩,男,24,13978901234,wanghao@email.com
+student008,杨丽,女,21,13989012345,yangli@email.com
+student009,赵刚,男,25,13990123456,zhaogang@email.com
+student010,孙娟,女,22,13901234567,sunjuan@email.com
+teacher001,马教授,男,45,13812345678,prof.ma@university.edu
+teacher002,钱老师,女,38,13823456789,qian.teacher@university.edu
+teacher003,罗博士,男,42,13834567890,dr.luo@university.edu
+admin001,管理员一,男,35,13845678901,admin1@library.gov
+admin002,管理员二,女,28,13856789012,admin2@library.gov 
