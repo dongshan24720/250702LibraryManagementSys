@@ -8,7 +8,7 @@
 
       <!-- 搜索表单 -->
       <div class="card">
-        <form @submit.prevent="searchBooks" class="space-y-4">
+        <form @submit.prevent="handleSearch" class="space-y-4">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label class="form-label">书名</label>
@@ -237,6 +237,10 @@ const loadInitialData = async () => {
     books.value = []
     // 不显示错误提示，因为这是初始加载
   }
+}
+
+const handleSearch = () => {
+  searchBooks(1) // 搜索时总是从第1页开始
 }
 
 const searchBooks = async (page = 1) => {

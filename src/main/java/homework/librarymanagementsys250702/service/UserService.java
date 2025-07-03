@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 用户Service
@@ -181,7 +182,7 @@ public class UserService {
         resultPage.setTotal(userPage.getTotal());
         resultPage.setRecords(userPage.getRecords().stream()
                 .map(this::convertToDTO)
-                .toList());
+                .collect(Collectors.toList()));
         
         return resultPage;
     }

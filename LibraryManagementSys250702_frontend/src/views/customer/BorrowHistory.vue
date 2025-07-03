@@ -8,7 +8,7 @@
 
       <!-- 筛选器 -->
       <div class="card">
-        <form @submit.prevent="loadHistory" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+        <form @submit.prevent="handleSearch" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
           <div>
             <label class="form-label">状态</label>
             <select v-model="filter.status" class="form-input">
@@ -236,6 +236,10 @@ const returnForm = ref({
 onMounted(async () => {
   await loadHistory()
 })
+
+const handleSearch = () => {
+  loadHistory(1) // 搜索时总是从第1页开始
+}
 
 const loadHistory = async (page = 1) => {
   loading.value = true

@@ -85,9 +85,12 @@ public class CustomerController {
      * 获取我的借阅记录
      */
     @GetMapping("/borrowing-records")
-    public Result<List<BorrowingRecordDTO>> getMyBorrowingRecords(HttpServletRequest request) {
+    public Result<List<BorrowingRecordDTO>> getMyBorrowingRecords(HttpServletRequest request,
+                                                                @RequestParam(required = false) String status,
+                                                                @RequestParam(required = false) String startDate,
+                                                                @RequestParam(required = false) String endDate) {
         Long userId = (Long) request.getAttribute("userId");
-        List<BorrowingRecordDTO> records = borrowingService.getUserBorrowingRecordsWithBookInfo(userId);
+        List<BorrowingRecordDTO> records = borrowingService.getUserBorrowingRecordsWithBookInfo(userId, status, startDate, endDate);
         return Result.success(records);
     }
 

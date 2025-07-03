@@ -64,6 +64,7 @@ export const customer = {
   returnBook: (recordId) => api.post(`/customer/return/${recordId}`),
   returnBookWithType: (recordId, returnRequest) => api.post(`/customer/return-with-type/${recordId}`, returnRequest),
   getBorrowHistory: (params = {}) => api.get('/customer/borrowing-records', { params }),
+  getBorrowingRecords: (params = {}) => api.get('/customer/borrowing-records', { params }),
   getStatistics: () => api.get('/customer/statistics')
 }
 

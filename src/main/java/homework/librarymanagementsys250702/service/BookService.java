@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 书籍Service
@@ -81,7 +82,7 @@ public class BookService {
         resultPage.setTotal(bookPage.getTotal());
         resultPage.setRecords(bookPage.getRecords().stream()
                 .map(this::convertToDTO)
-                .toList());
+                .collect(Collectors.toList()));
         
         return resultPage;
     }
@@ -93,7 +94,7 @@ public class BookService {
         List<Book> books = bookRepository.searchBooks(keyword);
         return books.stream()
                 .map(this::convertToDTO)
-                .toList();
+                .collect(Collectors.toList());
     }
     
     /**
@@ -128,7 +129,7 @@ public class BookService {
         List<Book> books = bookRepository.selectList(queryWrapper);
         return books.stream()
                 .map(this::convertToDTO)
-                .toList();
+                .collect(Collectors.toList());
     }
     
     /**

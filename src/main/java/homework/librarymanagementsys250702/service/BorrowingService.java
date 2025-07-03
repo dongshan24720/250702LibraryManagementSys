@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 借阅Service
@@ -342,7 +343,48 @@ public class BorrowingService {
     public List<BorrowingRecordDTO> getUserBorrowingRecordsWithBookInfo(Long userId) {
         // 获取用户的所有借阅记录，不仅仅是当前借阅的
         List<BorrowingRecord> records = borrowingRecordRepository.findAllBorrowingByUserId(userId);
-        return records.stream().map(this::convertToBorrowingRecordDTO).toList();
+        return records.stream().map(this::convertToBorrowingRecordDTO).collect(Collectors.toList());
+    }
+    
+    /**
+     * 获取用户借阅记录（包含书籍信息，支持筛选）
+     */
+    public List<BorrowingRecordDTO> getUserBorrowingRecordsWithBookInfo(Long userId, String status, String startDate, String endDate) {
+        QueryWrapper<BorrowingRecord> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
+        queryWrapper.eq("deleted", 0);
+        
+        // 状态筛选
+        if (org.springframework.util.StringUtils.hasText(status)) {
+            Integer statusValue = convertStatusFromString(status);
+            if (statusValue != null) {
+                queryWrapper.eq("status", statusValue);
+            }
+        }
+        
+        // 日期筛选
+        if (org.springframework.util.StringUtils.hasText(startDate)) {
+            try {
+                java.time.LocalDate date = java.time.LocalDate.parse(startDate);
+                queryWrapper.ge("borrow_time", date.atStartOfDay());
+            } catch (Exception e) {
+                // 日期格式错误，忽略此条件
+            }
+        }
+        
+        if (org.springframework.util.StringUtils.hasText(endDate)) {
+            try {
+                java.time.LocalDate date = java.time.LocalDate.parse(endDate);
+                queryWrapper.le("borrow_time", date.atTime(23, 59, 59));
+            } catch (Exception e) {
+                // 日期格式错误，忽略此条件
+            }
+        }
+        
+        queryWrapper.orderByDesc("borrow_time");
+        
+        List<BorrowingRecord> records = borrowingRecordRepository.selectList(queryWrapper);
+        return records.stream().map(this::convertToBorrowingRecordDTO).collect(Collectors.toList());
     }
     
     /**
@@ -384,14 +426,20 @@ public class BorrowingService {
      */
     private String convertStatusToString(Integer status) {
         if (status == null) return "UNKNOWN";
-        return switch (status) {
-            case 0 -> "BORROWED";
-            case 1 -> "RETURNED";
-            case 2 -> "OVERDUE";
-            case 3 -> "LOST";
-            case 4 -> "DAMAGED";
-            default -> "UNKNOWN";
-        };
+        switch (status) {
+            case 0:
+                return "BORROWED";
+            case 1:
+                return "RETURNED";
+            case 2:
+                return "OVERDUE";
+            case 3:
+                return "LOST";
+            case 4:
+                return "DAMAGED";
+            default:
+                return "UNKNOWN";
+        }
     }
     
     /**
@@ -512,7 +560,7 @@ public class BorrowingService {
             }
             
             return dto;
-        }).toList();
+        }).collect(Collectors.toList());
         
         dtoPage.setRecords(dtoList);
         return dtoPage;
@@ -522,13 +570,19 @@ public class BorrowingService {
      * 将状态字符串转换为数值
      */
     private Integer convertStatusFromString(String status) {
-        return switch (status) {
-            case "BORROWED" -> 0;
-            case "RETURNED" -> 1;
-            case "OVERDUE" -> 2;
-            case "LOST" -> 3;
-            case "DAMAGED" -> 4;
-            default -> null;
-        };
+        switch (status) {
+            case "BORROWED":
+                return 0;
+            case "RETURNED":
+                return 1;
+            case "OVERDUE":
+                return 2;
+            case "LOST":
+                return 3;
+            case "DAMAGED":
+                return 4;
+            default:
+                return null;
+        }
     }
 } 
